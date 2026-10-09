@@ -195,7 +195,7 @@ cask "$CASK" do
 
   # Sparkle updates the app in place; brew upgrade leaves it alone unless --greedy.
   auto_updates true
-  depends_on macos: ">= :$MIN_MACOS"
+  depends_on macos: :$MIN_MACOS
 
   app "$NAME.app"
 
