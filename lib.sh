@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Shared release steps for houlahop Mac apps: archive, Developer ID export, notarization, zip and pkg,
+# Shared release steps for houlahop Mac apps (the HoulahopUpdater Swift package in this repo is the in-app side): archive, Developer ID export, notarization, zip and pkg,
 # Sparkle appcast, GitHub release and Homebrew cask.
 #
 # An app's scripts/release.sh sets its configuration, sources this file, then calls the steps it needs:
@@ -20,7 +20,8 @@
 # Needs: "Developer ID Application" and "Developer ID Installer" certificates in the keychain, asc (App Store
 #   Connect CLI) signed in with an API key (`asc auth status`), the Sparkle signing key in the keychain, and gh.
 
-SPARKLE_VERSION="2.10.0"
+# The Sparkle tools match the Sparkle framework the apps link through Package.swift.
+SPARKLE_VERSION="$(sed -n -E 's|.*sparkle-project/Sparkle", exact: "([0-9.]+)".*|\1|p' "$(dirname "${BASH_SOURCE[0]}")/Package.swift")"
 TAP_REPO="plosson/homebrew-tap"
 TAP_NAME="plosson/tap"
 RELEASE_CACHE="$HOME/Library/Caches/houlahop-mac-release"
@@ -149,6 +150,7 @@ release_pkg() {
 # Writes APPCAST, the Sparkle feed for ZIP, signed with the SPARKLE_ACCOUNT key. The app reads
 # releases/latest/download/appcast.xml, so each release carries a feed with one item: its own zip.
 release_appcast() {
+  [[ -n "$SPARKLE_VERSION" ]] || release_fail "no Sparkle version found in Package.swift"
   local sparkle="$RELEASE_CACHE/Sparkle-$SPARKLE_VERSION"
   if [[ ! -x "$sparkle/bin/generate_appcast" ]]; then
     mkdir -p "$sparkle"
