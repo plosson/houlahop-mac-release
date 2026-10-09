@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Shared release steps for houlahop Mac apps (the HoulahopUpdater Swift package in this repo is the in-app side): archive, Developer ID export, notarization, zip and pkg,
-# Sparkle appcast, GitHub release and Homebrew cask.
+# Shared release steps for houlahop Mac apps: archive, Developer ID export, notarization, zip and pkg,
+# Sparkle appcast, GitHub release and Homebrew cask. The HoulahopUpdater package in this repo is the in-app side.
 #
 # An app's scripts/release.sh sets its configuration, sources this file, then calls the steps it needs:
 #
